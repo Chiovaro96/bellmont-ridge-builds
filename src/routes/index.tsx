@@ -90,8 +90,8 @@ function Index() {
             We rebuild the way you live.
           </h1>
           <p className="mt-3 max-w-[46ch] text-[15px] leading-relaxed text-muted-foreground">
-            Kitchens, baths, and full exteriors — designed and built for the
-            greater Houston area.
+            Kitchens, baths, and everything in between. — designed and built
+            for the greater Houston area.
           </p>
           <div className="mt-5 flex flex-col gap-3 sm:flex-row">
             <a
@@ -112,13 +112,13 @@ function Index() {
         {/* Stats */}
         <section className="mt-6 grid grid-cols-3 gap-3">
           <div className="glass rounded-2xl px-3 py-4 text-center">
-            <p className="font-display text-[22px] font-bold text-primary">180+</p>
+            <p className="font-display text-[22px] font-bold text-primary">80+</p>
             <p className="mt-1 text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
               Projects
             </p>
           </div>
           <div className="glass rounded-2xl px-3 py-4 text-center">
-            <p className="font-display text-[22px] font-bold text-teal">12yr</p>
+            <p className="font-display text-[22px] font-bold text-teal">6yr</p>
             <p className="mt-1 text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
               Experience
             </p>
@@ -176,10 +176,10 @@ function Index() {
             Serving the greater Houston area. Licensed, bonded &amp; insured.
           </p>
           <a
-            href="tel:+17135550148"
+            href="tel:+12816065386"
             className="mt-4 flex h-12 w-full items-center justify-center rounded-xl bg-gradient-to-r from-brand to-teal text-[14px] font-semibold text-white shadow-lg shadow-brand/30 transition-opacity hover:opacity-90"
           >
-            Call (713) 555-0148
+            Call (281) 606-5386
           </a>
         </section>
 
