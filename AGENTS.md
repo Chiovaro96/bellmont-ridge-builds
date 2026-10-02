@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Use the CDN-backed Bellmont Ridge logo asset for site branding so the uploaded identity remains consistent.
+- Submit public project inquiries through a validated server function into a private RLS-locked table so visitor contact details are never publicly readable.
