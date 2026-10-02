@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import kitchenImg from "@/assets/project-kitchen.jpg";
 import bathroomImg from "@/assets/project-bathroom.jpg";
 import exteriorImg from "@/assets/project-exterior.jpg";
+import logoAsset from "@/assets/bellmont-ridge-logo.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -63,19 +64,13 @@ function Index() {
       <div className="mx-auto max-w-md px-5 pb-10 pt-6 md:max-w-5xl">
         {/* Header */}
         <header className="glass flex items-center justify-between rounded-2xl px-4 py-3">
-          <div className="flex items-center gap-2.5">
-            <div className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-brand to-teal font-display text-sm font-bold text-white shadow-lg shadow-brand/30">
-              BR
-            </div>
-            <div className="leading-tight">
-              <p className="font-display text-[15px] font-bold tracking-tight">
-                Bellmont Ridge
-              </p>
-              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                Construction
-              </p>
-            </div>
-          </div>
+          <img
+            src={logoAsset.url}
+            alt="Bellmont Ridge Construction — Home Renovations"
+            width={1254}
+            height={1254}
+            className="size-20 rounded-xl object-cover shadow-lg shadow-foreground/15 sm:size-24"
+          />
           <span className="rounded-full border border-white/60 bg-white/50 px-3 py-1.5 text-[11px] font-semibold text-muted-foreground">
             Houston, TX
           </span>
