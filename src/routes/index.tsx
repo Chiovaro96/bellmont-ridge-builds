@@ -1,8 +1,23 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useServerFn } from "@tanstack/react-router";
+import { useState, type FormEvent } from "react";
+import { CheckCircle2, Loader2, Phone } from "lucide-react";
 import kitchenImg from "@/assets/project-kitchen.jpg";
 import bathroomImg from "@/assets/project-bathroom.jpg";
 import exteriorImg from "@/assets/project-exterior.jpg";
 import logoAsset from "@/assets/bellmont-ridge-logo.png.asset.json";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { submitProjectInquiry } from "@/lib/inquiries.functions";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -58,7 +73,70 @@ const projects = [
   },
 ];
 
+const projectTypes = [
+  "Kitchen remodel",
+  "Bathroom remodel",
+  "Exterior remodel",
+  "Whole-home renovation",
+  "Other",
+] as const;
+
+const timelines = [
+  "As soon as possible",
+  "1–3 months",
+  "3–6 months",
+  "6–12 months",
+  "Just exploring",
+] as const;
+
 function Index() {
+  const submitInquiry = useServerFn(submitProjectInquiry);
+  const [projectType, setProjectType] = useState<(typeof projectTypes)[number]>(
+    "Kitchen remodel",
+  );
+  const [preferredTimeline, setPreferredTimeline] = useState<(typeof timelines)[number]>(
+    "1–3 months",
+  );
+  const [consultationRequested, setConsultationRequested] = useState(true);
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const fields = new FormData(form);
+
+    setStatus("submitting");
+    setErrorMessage("");
+
+    try {
+      await submitInquiry({
+        data: {
+          name: String(fields.get("name") ?? ""),
+          email: String(fields.get("email") ?? ""),
+          phone: String(fields.get("phone") ?? ""),
+          projectType,
+          projectDescription: String(fields.get("projectDescription") ?? ""),
+          preferredTimeline,
+          consultationRequested,
+          website: String(fields.get("website") ?? ""),
+        },
+      });
+      form.reset();
+      setProjectType("Kitchen remodel");
+      setPreferredTimeline("1–3 months");
+      setConsultationRequested(true);
+      setStatus("success");
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "We couldn't send your request. Please call us instead.",
+      );
+      setStatus("error");
+    }
+  };
+
   return (
     <div className="bg-scene min-h-screen w-full font-sans text-foreground antialiased">
       <div className="mx-auto max-w-md px-5 pb-10 pt-6 md:max-w-5xl">
@@ -71,7 +149,7 @@ function Index() {
             height={1254}
             className="size-20 rounded-xl object-cover shadow-lg shadow-foreground/15 sm:size-24"
           />
-          <span className="rounded-full border border-white/60 bg-white/50 px-3 py-1.5 text-[11px] font-semibold text-muted-foreground">
+          <span className="rounded-full border border-border bg-background/60 px-3 py-1.5 text-[11px] font-semibold text-muted-foreground">
             Houston, TX
           </span>
         </header>
@@ -97,7 +175,7 @@ function Index() {
             </a>
             <a
               href="#work"
-              className="glass-soft flex h-12 items-center justify-center rounded-xl px-4 text-[14px] font-semibold text-foreground transition-colors hover:bg-white/60"
+              className="glass-soft flex h-12 items-center justify-center rounded-xl px-4 text-[14px] font-semibold text-foreground transition-colors hover:bg-background/70"
             >
               View work
             </a>
@@ -162,20 +240,128 @@ function Index() {
           </div>
         </section>
 
-        {/* CTA */}
-        <section id="contact" className="glass mt-10 scroll-mt-6 rounded-3xl p-5">
-          <h2 className="font-display text-[20px] font-bold tracking-tight">
-            Ready to start your project?
-          </h2>
-          <p className="mt-1 text-[13px] text-muted-foreground">
-            Serving the greater Houston area. Licensed, bonded &amp; insured.
-          </p>
-          <a
-            href="tel:+12816065386"
-            className="mt-4 flex h-12 w-full items-center justify-center rounded-xl bg-gradient-to-r from-brand to-teal text-[14px] font-semibold text-white shadow-lg shadow-brand/30 transition-opacity hover:opacity-90"
-          >
-            Call (281) 606-5386
-          </a>
+        {/* Estimate request */}
+        <section id="contact" className="glass mt-10 scroll-mt-6 rounded-3xl p-5 md:p-8">
+          <div className="md:flex md:items-end md:justify-between md:gap-8">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
+                Free project estimate
+              </p>
+              <h2 className="mt-2 font-display text-2xl font-bold tracking-tight">
+                Tell us what you’re planning.
+              </h2>
+              <p className="mt-2 max-w-xl text-[13px] leading-relaxed text-muted-foreground">
+                Share a few details and we’ll reach out to discuss your Houston-area renovation.
+              </p>
+            </div>
+            <a
+              href="tel:+12816065386"
+              className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-foreground md:mt-0"
+            >
+              <Phone className="size-4" aria-hidden="true" />
+              (281) 606-5386
+            </a>
+          </div>
+
+          {status === "success" ? (
+            <div className="mt-6 flex min-h-64 flex-col items-center justify-center rounded-2xl border border-primary/30 bg-background/55 px-6 text-center" role="status">
+              <CheckCircle2 className="size-10 text-primary" aria-hidden="true" />
+              <h3 className="mt-4 font-display text-xl font-bold">Your request is in.</h3>
+              <p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
+                Thanks for reaching out. Bellmont Ridge Construction will contact you about your project.
+              </p>
+              <Button type="button" variant="outline" className="mt-5" onClick={() => setStatus("idle")}>
+                Send another request
+              </Button>
+            </div>
+          ) : (
+            <form className="mt-6 grid gap-5" onSubmit={handleSubmit}>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <div className="grid gap-2">
+                  <Label htmlFor="name">Name</Label>
+                  <Input id="name" name="name" autoComplete="name" minLength={2} maxLength={100} required className="h-11 bg-background/55" />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="phone">Phone</Label>
+                  <Input id="phone" name="phone" type="tel" autoComplete="tel" minLength={7} maxLength={30} required className="h-11 bg-background/55" />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input id="email" name="email" type="email" autoComplete="email" maxLength={255} required className="h-11 bg-background/55" />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="project-type">Project type</Label>
+                  <Select value={projectType} onValueChange={(value) => setProjectType(value as (typeof projectTypes)[number])}>
+                    <SelectTrigger id="project-type" className="h-11 bg-background/55">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {projectTypes.map((type) => (
+                        <SelectItem key={type} value={type}>{type}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="project-description">Tell us about your renovation</Label>
+                <Textarea
+                  id="project-description"
+                  name="projectDescription"
+                  placeholder="What would you like to change, and what matters most for the finished space?"
+                  minLength={20}
+                  maxLength={2000}
+                  required
+                  className="min-h-32 resize-y bg-background/55"
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="timeline">Preferred timeline</Label>
+                <Select value={preferredTimeline} onValueChange={(value) => setPreferredTimeline(value as (typeof timelines)[number])}>
+                  <SelectTrigger id="timeline" className="h-11 bg-background/55">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {timelines.map((timeline) => (
+                      <SelectItem key={timeline} value={timeline}>{timeline}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="hidden" aria-hidden="true">
+                <Label htmlFor="website">Website</Label>
+                <Input id="website" name="website" tabIndex={-1} autoComplete="off" />
+              </div>
+
+              <div className="flex items-start gap-3 rounded-xl border border-border bg-background/45 p-4">
+                <Checkbox
+                  id="consultation"
+                  checked={consultationRequested}
+                  onCheckedChange={(checked) => setConsultationRequested(checked === true)}
+                />
+                <Label htmlFor="consultation" className="cursor-pointer text-sm leading-relaxed">
+                  I’d like Bellmont Ridge Construction to contact me about a consultation.
+                </Label>
+              </div>
+
+              {status === "error" && (
+                <p className="text-sm font-medium text-destructive" role="alert">
+                  {errorMessage}
+                </p>
+              )}
+
+              <Button type="submit" size="lg" disabled={status === "submitting"} className="h-12 w-full rounded-xl text-[14px] shadow-lg shadow-primary/20">
+                {status === "submitting" ? (
+                  <><Loader2 className="animate-spin" aria-hidden="true" /> Sending request…</>
+                ) : (
+                  "Request my free estimate"
+                )}
+              </Button>
+            </form>
+          )}
         </section>
 
         <p className="mt-6 text-center text-[11px] text-muted-foreground/70">
