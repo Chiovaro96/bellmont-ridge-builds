@@ -5,6 +5,9 @@ import { CheckCircle2, Loader2, Phone } from "lucide-react";
 import kitchenImg from "@/assets/project-kitchen.jpg";
 import bathroomImg from "@/assets/project-bathroom.jpg";
 import exteriorImg from "@/assets/project-exterior.jpg";
+import kitchenBeforeImg from "@/assets/project-kitchen-before.jpg";
+import bathroomBeforeImg from "@/assets/project-bathroom-before.jpg";
+import exteriorBeforeImg from "@/assets/project-exterior-before.jpg";
 import logoAsset from "@/assets/bellmont-ridge-logo.png.asset.json";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -51,24 +54,30 @@ const projects = [
   {
     label: "Kitchen Remodel",
     location: "Cypress, TX",
-    image: kitchenImg,
-    alt: "Open-concept kitchen remodel with a quartz waterfall island, matte black cabinetry, and white oak accents",
+    beforeImage: kitchenBeforeImg,
+    beforeAlt: "Dated kitchen before renovation with honey-oak cabinets, laminate counters, and white appliances",
+    afterImage: kitchenImg,
+    afterAlt: "Open-concept kitchen after renovation with a quartz waterfall island, matte black cabinetry, and white oak accents",
     summary: "Open-concept kitchen with quartz islands and matte black cabinetry.",
     meta: "14 weeks · $68,000",
   },
   {
     label: "Bathroom Remodel",
     location: "The Woodlands, TX",
-    image: bathroomImg,
-    alt: "Primary bathroom remodel with a walk-in glass shower, floating wood vanity, and freestanding tub",
+    beforeImage: bathroomBeforeImg,
+    beforeAlt: "Dated primary bathroom before renovation with an enclosed shower, oak vanity, and beige tile",
+    afterImage: bathroomImg,
+    afterAlt: "Primary bathroom after renovation with a walk-in glass shower, floating wood vanity, and freestanding tub",
     summary: "Primary bath with a walk-in glass shower and floating vanity.",
     meta: "9 weeks · $42,000",
   },
   {
     label: "Exterior Remodel",
     location: "Katy, TX",
-    image: exteriorImg,
-    alt: "Home exterior remodel with new siding, a new front door, and landscape lighting at dusk",
+    beforeImage: exteriorBeforeImg,
+    beforeAlt: "Aging home exterior before renovation with faded siding, weathered trim, and sparse landscaping",
+    afterImage: exteriorImg,
+    afterAlt: "Home exterior after renovation with new siding, a new front door, and landscape lighting at dusk",
     summary: "Full facade refresh with new siding and a covered patio.",
     meta: "11 weeks · $95,000",
   },
@@ -211,18 +220,41 @@ function Index() {
             Recent projects
           </h2>
 
-          <div className="mt-4 grid gap-4 md:grid-cols-3">
+          <div className="mt-4 grid gap-5">
             {projects.map((project) => (
-              <article key={project.label} className="glass overflow-hidden rounded-3xl">
-                <img
-                  src={project.image}
-                  alt={project.alt}
-                  width={1536}
-                  height={960}
-                  loading="lazy"
-                  className="aspect-[16/10] w-full object-cover"
-                />
-                <div className="p-4">
+              <article
+                key={project.label}
+                className="glass overflow-hidden rounded-3xl md:grid md:grid-cols-[minmax(0,1.65fr)_minmax(15rem,0.7fr)]"
+              >
+                <div className="grid grid-cols-2 gap-px bg-border" aria-label={`${project.label} before and after comparison`}>
+                  <figure className="relative overflow-hidden bg-muted">
+                    <img
+                      src={project.beforeImage}
+                      alt={project.beforeAlt}
+                      width={1536}
+                      height={960}
+                      loading="lazy"
+                      className="aspect-[4/3] h-full w-full object-cover"
+                    />
+                    <figcaption className="absolute left-3 top-3 rounded-full border border-background/30 bg-foreground/80 px-3 py-1 text-[10px] font-bold uppercase text-primary-foreground backdrop-blur-sm">
+                      Before
+                    </figcaption>
+                  </figure>
+                  <figure className="relative overflow-hidden bg-muted">
+                    <img
+                      src={project.afterImage}
+                      alt={project.afterAlt}
+                      width={1536}
+                      height={960}
+                      loading="lazy"
+                      className="aspect-[4/3] h-full w-full object-cover"
+                    />
+                    <figcaption className="absolute left-3 top-3 rounded-full border border-background/30 bg-primary/90 px-3 py-1 text-[10px] font-bold uppercase text-primary-foreground backdrop-blur-sm">
+                      After
+                    </figcaption>
+                  </figure>
+                </div>
+                <div className="flex flex-col justify-center p-5 md:p-6">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary">
                       {project.label}
