@@ -9,5 +9,5 @@
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
 
-- Use the CDN-backed Bellmont Ridge logo asset for site branding so the uploaded identity remains consistent.
+- Serve the Bellmont Ridge logo from `public/bellmont-ridge-logo.png` (referenced as `/bellmont-ridge-logo.png`) — the CDN asset URL 404s on the user's custom domain, so branding must be self-hosted.
 - Submit public project inquiries through a validated server function into a private RLS-locked table so visitor contact details are never publicly readable.

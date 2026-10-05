@@ -8,7 +8,6 @@ import exteriorImg from "@/assets/project-exterior.jpg";
 import kitchenBeforeImg from "@/assets/project-kitchen-before.jpg";
 import bathroomBeforeImg from "@/assets/project-bathroom-before.jpg";
 import exteriorBeforeImg from "@/assets/project-exterior-before.jpg";
-import logoAsset from "@/assets/bellmont-ridge-logo.png.asset.json";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
