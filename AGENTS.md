@@ -10,4 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Serve the Bellmont Ridge logo from `public/bellmont-ridge-logo.png` (referenced as `/bellmont-ridge-logo.png`) — the CDN asset URL 404s on the user's custom domain, so branding must be self-hosted.
-- Submit public project inquiries through a validated server function into a private RLS-locked table so visitor contact details are never publicly readable.
+- Send estimate-form submissions by email through Resend from a validated server function using the runtime `RESEND_API_KEY` secret, with no database dependency — the site is hosted on an external Cloudflare Worker without backend credentials.

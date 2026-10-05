@@ -109,9 +109,13 @@ function Index() {
   const [consultationRequested, setConsultationRequested] = useState(true);
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const submittingRef = useRef(false);
+  const startedAtRef = useRef(Date.now());
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (submittingRef.current) return;
+    submittingRef.current = true;
     const form = event.currentTarget;
     const fields = new FormData(form);
 
@@ -129,6 +133,7 @@ function Index() {
           preferredTimeline,
           consultationRequested,
           website: String(fields.get("website") ?? ""),
+          startedAt: startedAtRef.current,
         },
       });
       form.reset();
