@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { CheckCircle2, Loader2, Phone } from "lucide-react";
 import kitchenImg from "@/assets/project-kitchen.jpg";
 import bathroomImg from "@/assets/project-bathroom.jpg";
@@ -109,9 +109,13 @@ function Index() {
   const [consultationRequested, setConsultationRequested] = useState(true);
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const submittingRef = useRef(false);
+  const startedAtRef = useRef(Date.now());
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (submittingRef.current) return;
+    submittingRef.current = true;
     const form = event.currentTarget;
     const fields = new FormData(form);
 
@@ -129,6 +133,7 @@ function Index() {
           preferredTimeline,
           consultationRequested,
           website: String(fields.get("website") ?? ""),
+          startedAt: startedAtRef.current,
         },
       });
       form.reset();
@@ -143,6 +148,9 @@ function Index() {
           : "We couldn't send your request. Please call us instead.",
       );
       setStatus("error");
+    } finally {
+      submittingRef.current = false;
+      startedAtRef.current = Math.min(startedAtRef.current, Date.now() - 3000);
     }
   };
 
