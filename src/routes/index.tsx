@@ -153,7 +153,7 @@ function Index() {
         {/* Header */}
         <header className="glass flex items-center justify-between rounded-2xl px-4 py-3">
           <img
-            src={logoAsset.url}
+            src="/bellmont-ridge-logo.png"
             alt="Bellmont Ridge Construction — Home Renovations"
             width={1254}
             height={1254}
