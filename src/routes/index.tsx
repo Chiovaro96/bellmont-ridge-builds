@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { CheckCircle2, Loader2, Phone } from "lucide-react";
 import kitchenImg from "@/assets/project-kitchen.jpg";
 import bathroomImg from "@/assets/project-bathroom.jpg";
@@ -148,6 +148,9 @@ function Index() {
           : "We couldn't send your request. Please call us instead.",
       );
       setStatus("error");
+    } finally {
+      submittingRef.current = false;
+      startedAtRef.current = Math.min(startedAtRef.current, Date.now() - 3000);
     }
   };
 
