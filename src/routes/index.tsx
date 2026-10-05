@@ -187,7 +187,7 @@ function Index() {
               href="#work"
               className="glass-soft flex h-12 items-center justify-center rounded-xl px-4 text-[14px] font-semibold text-foreground transition-colors hover:bg-background/70"
             >
-              View work
+              View our work
             </a>
           </div>
         </section>
